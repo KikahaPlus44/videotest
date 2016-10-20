@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <style type="text/css">
+        html {
+            cursor: none; 
+        }
+        .video, .second {
+            display: -webkit-flex;
+            display: -moz-flex;
+            display: -ms-flex;
+            display: -o-flex;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+        .map {
+            width: 80%;
+        }
+        body {
+            position: relative;
+        }
+        button {
+            font-size: 25px;
+        }
+        video {
+            margin-left: 1px;
+        }
+    </style>
+</head>
+<body id="body">
+    <button id="Button1" type="button"
+    />Сделать в полный экран</button>
+    <section>
+        <div class="video">
+            <video width="24%" height="400"  loop autoplay>
+                <source src="1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <video width="24%" height="400"  loop autoplay>
+                <source src="4.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <video width="24%" height="400"  loop autoplay>
+                <source src="2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <video width="24%" height="400"  loop autoplay>
+                <source src="3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video" style="margin-top: -49px;"">
+            <video width="24%" height="400"  loop autoplay>
+                <source src="1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <video width="24%" height="400"  loop autoplay>
+                <source src="4.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <video width="24%" height="400"  loop autoplay>
+                <source src="2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <video width="24%" height="400"  loop autoplay>
+                <source src="3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </section>
+    <section class="second">
+        <div class="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d349.1970746035756!2d27.588105920172474!3d53.92981540943602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sby!4v1476949883746" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>
+        </div>
+        <div>
+            <a class="twitter-timeline" data-width="330" data-height="400" href="https://twitter.com/TwitterDev/lists/national-parks">A Twitter List by TwitterDev</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+    </section>
+
+    <script type="text/javascript">
+        // var isFullScreen = false; 
+        // if (!isFullScreen) {
+        //     document.getElementById("Button1").click();
+        //     isFullScreen = true;
+        //     console.log(isFullScreen);
+        // }
+
+        // function  FullScreenMode(){
+        //     var win = window.open("", "full", "dependent=yes, fullscreen=yes");
+        //     win.location = window.location.href;
+        //     window.opener = null;
+        //     isFullScreen = true;
+        // };
+        (function () {
+            'use strict';
+
+            var isCommonjs = typeof module !== 'undefined' && module.exports;
+            var keyboardAllowed = typeof Element !== 'undefined' && 'ALLOW_KEYBOARD_INPUT' in Element;
+
+            var fn = (function () {
+                var val;
+                var valLength;
+
+                var fnMap = [
+                    [
+                        'requestFullscreen',
+                        'exitFullscreen',
+                        'fullscreenElement',
+                        'fullscreenEnabled',
+                        'fullscreenchange',
+                        'fullscreenerror'
+                    ],
+                    // new WebKit
+                    [
+                        'webkitRequestFullscreen',
+                        'webkitExitFullscreen',
+                        'webkitFullscreenElement',
+                        'webkitFullscreenEnabled',
+                        'webkitfullscreenchange',
+                        'webkitfullscreenerror'
+
+                    ],
+                    // old WebKit (Safari 5.1)
+                    [
+                        'webkitRequestFullScreen',
+                        'webkitCancelFullScreen',
+                        'webkitCurrentFullScreenElement',
+                        'webkitCancelFullScreen',
+                        'webkitfullscreenchange',
+                        'webkitfullscreenerror'
+
+                    ],
+                    [
+                        'mozRequestFullScreen',
+                        'mozCancelFullScreen',
+                        'mozFullScreenElement',
+                        'mozFullScreenEnabled',
+                        'mozfullscreenchange',
+                        'mozfullscreenerror'
+                    ],
+                    [
+                        'msRequestFullscreen',
+                        'msExitFullscreen',
+                        'msFullscreenElement',
+                        'msFullscreenEnabled',
+                        'MSFullscreenChange',
+                        'MSFullscreenError'
+                    ]
+                ];
+
+                var i = 0;
+                var l = fnMap.length;
+                var ret = {};
+
+                for (; i < l; i++) {
+                    val = fnMap[i];
+                    if (val && val[1] in document) {
+                        for (i = 0, valLength = val.length; i < valLength; i++) {
+                            ret[fnMap[0][i]] = val[i];
+                        }
+                        return ret;
+                    }
+                }
+
+                return false;
+            })();
+
+            var screenfull = {
+                request: function (elem) {
+                    var request = fn.requestFullscreen;
+
+                    elem = elem || document.documentElement;
+
+                    // Work around Safari 5.1 bug: reports support for
+                    // keyboard in fullscreen even though it doesn't.
+                    // Browser sniffing, since the alternative with
+                    // setTimeout is even worse.
+                    if (/5\.1[\.\d]* Safari/.test(navigator.userAgent)) {
+                        elem[request]();
+                    } else {
+                        elem[request](keyboardAllowed && Element.ALLOW_KEYBOARD_INPUT);
+                    }
+                },
+                exit: function () {
+                    document[fn.exitFullscreen]();
+                },
+                toggle: function (elem) {
+                    if (this.isFullscreen) {
+                        this.exit();
+                    } else {
+                        this.request(elem);
+                    }
+                },
+                raw: fn
+            };
+
+            if (!fn) {
+                if (isCommonjs) {
+                    module.exports = false;
+                } else {
+                    window.screenfull = false;
+                }
+
+                return;
+            }
+
+            Object.defineProperties(screenfull, {
+                isFullscreen: {
+                    get: function () {
+                        return Boolean(document[fn.fullscreenElement]);
+                    }
+                },
+                element: {
+                    enumerable: true,
+                    get: function () {
+                        return document[fn.fullscreenElement];
+                    }
+                },
+                enabled: {
+                    enumerable: true,
+                    get: function () {
+                        // Coerce to boolean in case of old WebKit
+                        return Boolean(document[fn.fullscreenEnabled]);
+                    }
+                }
+            });
+
+            if (isCommonjs) {
+                module.exports = screenfull;
+            } else {
+                window.screenfull = screenfull;
+            }
+        })();
+        document.getElementById('Button1').addEventListener('click', () => {
+            if (screenfull.enabled) {
+                screenfull.request();
+                document.getElementById('Button1').style.display = 'none';  
+            } else {
+                // Ignore or do something else
+            }
+        });
+    </script>
+</body>
+</html>
